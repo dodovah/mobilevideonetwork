@@ -1,67 +1,65 @@
+
 //
 //  ViewController.swift
 //  KHSTREAM BETA 2
 //
-//  Created by Dylan Holloran on 6/30/15.
+//  Created by Dylan Holloran on 7/1/15.
 //  Copyright © 2015 KHMEDIA LABS. All rights reserved.
 //
 
+import Foundation
 import UIKit
+import MessageUI
 
-class ViewController: UIViewController  {
 
+class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    @IBAction func launchEmail (sender:AnyObject){
-        
-        var emailTitle = "Tech Support"
-        var messageBody = "In need of technical support"
-        var toRecipents = ["dholloran@khstream.org"]
-        var mc:mFMailComposeViewController = MFMailComposeViewcontroller()
-        mc.mailComposeDelegate = self
-        mc.setSubject(emailTitle)
-        mc.setMessageBody(messageBody, isHTML: false)
-        mc.setToRecipeints(toRecipents)
-        
-        self.presentViewController (mc, animated: true, completeion: nil)}
     
-    func mailComposeControler(controller:MFMailComposeViewController, didFinishWithResult result:MFMailComposeResult, Error:NSError)
-    switch result.value {
-
-    caseMFMailComposeResultCancelled.value:
-            println("Mail Cancelled")
-        case MFMailComposeResultSaved.value:
-            println("Mail Saved")
-        case MFMailComposeResultSent.value:
-            println("Mail Sent")
-        case MFMailComposeResultFailed.value:
-            println("Mail Sent Failure %@", [error.localizedDescription])
-        default:
-            break
+    class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
+        
+        override func viewDidLoad() {
+            super.viewDidLoad()
         }
-        self.dismissViewcontrollerAnimated(true, completion: null)
-    
-    @IBOutlet weak var username: UITextField!
-    
-    @IBOutlet weak var passwordfield: UITextField!
-    
-    @IBAction func login(sender: AnyObject) {
-        if username.text == "" || passwordfield.text == "" {
-            let alert = UIAlertController()
-            alert.title = "Error"
-            alert.message = "Please Enter Username and/or Password"
-            alert.addAction(<#T##action: UIAlertAction##UIAlertAction#>)
-            alert.addKeyCommand(<#T##keyCommand: UIKeyCommand##UIKeyCommand#>)(a)
+        @IBAction func emailbutton(sender: AnyObject) {
+            let mailComposeViewController = configuredMailComposeViewController()
+            if MFMailComposeViewController.canSendMail() {
+                self.presentViewController(mailComposeViewController, animated: true, completion: nil)
+                
+            }
+        }
+        
+        func configuredMailComposeViewController() -> MFMailComposeViewController {
+            let mailComposerVC = MFMailComposeViewController()
+            mailComposerVC.mailComposeDelegate = self // Extremely important to set the --mailComposeDelegate-- property, NOT the --delegate-- property
             
+            mailComposerVC.setToRecipients(["dholloran@khstream.org"])
+            mailComposerVC.setSubject("Technical Support for IOS APP")
+            mailComposerVC.setMessageBody("I am in need of Technical support. My issue is as follows", isHTML: false)
+            
+            return mailComposerVC
         }
     }
+
+    @IBAction func WebLink(sender: AnyObject) {
+        if let url = NSURL(string: "http://www.jw.org") {
+            UIApplication.sharedApplication().openURL(url)
+        }
+}
+
+        
+        
     
+
+
 }
